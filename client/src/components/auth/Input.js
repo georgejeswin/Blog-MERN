@@ -15,7 +15,7 @@ const Input = ({
 }) => {
   const classes = useStyles();
   return (
-    <Grid xs={12} sm={half ? 6 : 12} spacing={2}>
+    <Grid item xs={12} sm={half ? 6 : 12} spacing={2}>
       <TextField
         className={classes.inputField}
         m="2rem"
@@ -38,7 +38,7 @@ const Input = ({
             ),
           }
         }
-      ></TextField>
+      />
     </Grid>
   );
 };
