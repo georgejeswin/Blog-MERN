@@ -15,10 +15,9 @@ const Input = ({
 }) => {
   const classes = useStyles();
   return (
-    <Grid item xs={12} sm={half ? 6 : 12} spacing={2}>
+    <Grid item xs={12} sm={half ? 6 : 12}>
       <TextField
         className={classes.inputField}
-        m="2rem"
         name={name}
         onChange={handleChange}
         variant="outlined"
@@ -27,16 +26,18 @@ const Input = ({
         label={label}
         autoFocus={autoFocus}
         type={type}
-        inputProps={
-          name === "password" && {
-            endAdordnment: (
-              <InputAdornment position="end">
-                <IconButton click={handleShowPassword}>
-                  {type === "password" ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }
+        iInputProps={
+          name === "password"
+            ? {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleShowPassword}>
+                      {type === "password" ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }
+            : null
         }
       />
     </Grid>

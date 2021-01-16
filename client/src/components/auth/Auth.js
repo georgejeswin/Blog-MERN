@@ -13,19 +13,32 @@ import useStyles from "./styles";
 import { GoogleLogin } from "react-google-login";
 import Icon from "./Icon";
 import { useDispatch } from "react-redux";
+import { AUTH } from "../../constants/actionTypes";
+import { useHistory } from "react-router-dom";
+import { login, signup } from "../../actions/auth";
 
 const Auth = () => {
+  const initialState = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
   const [isSignup, setIsSignup] = useState(false);
   const classes = useStyles();
+  const history = useHistory();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState(initialState);
   const googleSuccess = async (res) => {
     console.log(res);
     const result = res?.profileObj;
     const token = res.tokenId;
 
     try {
-      dispatch({ type: "AUTH", data: { result, token } });
+      dispatch({ type: AUTH, data: { result, token } });
+      history.push("/");
     } catch (error) {
       console.log(error);
     }
@@ -38,11 +51,24 @@ const Auth = () => {
   const handleShowPassword = () => {
     setShowPassword((prevPassword) => !prevPassword);
   };
-  const handleSubmit = () => {};
-  const handleChange = () => {};
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // console.log(formData);
+    if (isSignup) {
+      dispatch(signup(formData, history));
+    } else {
+      dispatch(login(formData, history));
+    }
+  };
+
   const switchMode = () => {
     setIsSignup((prevState) => !prevState);
-    handleShowPassword(false);
+    setShowPassword(false);
   };
   return (
     <Container maxWidth="xs" component="main">
@@ -56,20 +82,21 @@ const Auth = () => {
             {isSignup && (
               <>
                 <Input
-                  className={classes.inputField}
-                  name="firstname"
+                  // className={classes.inputField}
+                  name="firstName"
                   label="First Name"
-                  onChange={handleChange}
+                  handleChange={handleChange}
+                  // onChange={(e) => setFormData({ firstName: e.target.value })}
                   autoFocus
-                  half
+                  // half
                 />
 
                 <Input
-                  className={classes.inputField}
-                  name="lastname"
+                  // className={classes.inputField}
+                  name="lastName"
                   label="Last Name"
-                  onChange={handleChange}
-                  half
+                  handleChange={handleChange}
+                  // half
                 />
               </>
             )}
